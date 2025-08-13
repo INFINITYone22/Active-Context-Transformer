@@ -18,9 +18,97 @@ Based on the task at hand, the AI decides what to store. This capability can be 
 
 ## Project Goal and Philosophy
 
-This repository outlines the concept for the Active Context Transformer. The implementation code has been removed to focus on the architectural proposal. For a detailed technical breakdown, please refer to the research paper.
+This repository now includes a minimal, production-ready implementation of the Active Context Transformer alongside the conceptual paper.
 
-*   📄 **[Research Paper](./research_paper.md)**
+- 📄 Research Paper: [Paper.md](./Paper.md)
+- 🧩 Python package: middleware, storage, parser, CLI, and FastAPI server
+- ✅ Tests included (pytest)
+
+---
+
+## Quickstart
+
+### 1) Install
+
+Option A: editable install
+
+```bash
+pip install -e .
+```
+
+Option B: use requirements
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2) CLI usage
+
+Process a model response containing memory commands and print cleaned text:
+
+```bash
+act process-output --text "Here is an answer.```MEMORY_CMD\nSTORE|blk1|summary|note|full content|a,b\n```"
+```
+
+Manually store and retrieve blocks:
+
+```bash
+act store blk1 --summary "summary" --type note --content "full content" --tags a,b
+act retrieve blk1 | jq .
+act list
+```
+
+The storage file defaults to `data/context_store.json`. Override with `--store-path /custom/path.json` or set `ACT_STORE_PATH`.
+
+### 3) Run the server
+
+```bash
+act-server
+```
+
+Endpoints:
+- GET `/health`
+- POST `/process_output` { text }
+- POST `/store` { id, summary, type, content, tags }
+- GET `/retrieve/{id}`
+- GET `/blocks` (optional query, tag)
+- DELETE `/blocks/{id}`
+
+### 4) Example MEMORY_CMD formats
+
+- Store:
+
+```
+STORE|block_id|summary_of_content|type|full_content|tag1,tag2
+```
+
+- Retrieve:
+
+```
+RETRIEVE|block_id
+```
+
+You can embed these as:
+
+- A fenced block:
+
+```
+```MEMORY_CMD
+STORE|...|...|...|...|...
+```
+```
+
+- An inline directive:
+
+```
+MEMORY_CMD: STORE|...|...|...|...|...
+```
+
+- Or on its own line:
+
+```
+STORE|...|...|...|...|...
+```
 
 ---
 

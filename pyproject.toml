@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "active-context-transformer"
+version = "0.1.0"
+description = "Active Context Transformer (ACT): middleware for transformer-driven memory using model-generated commands."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Rohith Garapati" }
+]
+keywords = ["transformer", "memory", "LLM", "context", "AI"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "fastapi>=0.111.0",
+  "uvicorn[standard]>=0.30.0",
+  "typer[all]>=0.12.3",
+  "filelock>=3.13.0",
+  "pydantic>=2.7.0",
+  "rich>=13.7.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/INFINITYone22/active-context-transformer"
+
+[project.scripts]
+act = "act.cli:main"
+act-server = "act.server:main"
+
+[tool.setuptools.packages.find]
+include = ["act*"]
+exclude = ["tests*", "data*"]
